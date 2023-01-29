@@ -1,5 +1,7 @@
 using HotelListing.Confiqurations;
 using HotelListing.Data;
+using HotelListing.IRepository;
+using HotelListing.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -33,7 +35,9 @@ namespace HotelListing
             //Add Connection Strings
             services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("sqlConnection")));
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(op =>
+            op.SerializerSettings.ReferenceLoopHandling =
+                Newtonsoft.Json.ReferenceLoopHandling.Ignore); ;
             services.AddCors(o =>
             {
                 o.AddPolicy("AllowAll", builder=>
@@ -43,6 +47,7 @@ namespace HotelListing
                 );
             });
             services.AddAutoMapper(typeof(MapperInlizer));
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "HotelListing", Version = "v1" });
