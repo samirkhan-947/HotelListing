@@ -34,6 +34,8 @@ namespace HotelListing
 
             //Add Connection Strings
             services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("sqlConnection")));
+            services.AddAuthentication();
+            services.ConfiqureIdentity();
 
             services.AddControllers().AddNewtonsoftJson(op =>
             op.SerializerSettings.ReferenceLoopHandling =
