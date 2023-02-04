@@ -42,6 +42,7 @@ namespace HotelListing
                     o.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
+                        ValidateAudience = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = JwtSettings.GetSection("Issuer").Value,

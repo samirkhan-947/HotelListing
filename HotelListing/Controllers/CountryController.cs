@@ -27,6 +27,7 @@ namespace HotelListing.Controllers
             _logger = logger;
             _mapper = mapper;
         }
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetCoutires([FromQuery] RequestParams requestParams)
         {
