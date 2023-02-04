@@ -28,21 +28,11 @@ namespace HotelListing.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<IActionResult> GetCoutires()
+        public async Task<IActionResult> GetCoutires([FromQuery] RequestParams requestParams)
         {
-            try
-            {
-              var countries = await  _unitOfWork.Countries.GetAll();
-                var result = _mapper.Map<IList<CountryDto>>(countries);
-
-                return Ok(result); 
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Something went wrong in the {nameof(GetCoutires)}");
-                return StatusCode(500, "Internal server Error.");
-                
-            }
+            var countries = await _unitOfWork.Countries.GetPagedList(requestParams);
+            var result = _mapper.Map<List<CountryDto>>(countries);
+            return Ok(result);
         }
 
         [HttpGet("{id:int}", Name = "GetCountry")]
@@ -53,7 +43,7 @@ namespace HotelListing.Controllers
         {
             try
             {
-                var Country = await _unitOfWork.Countries.Get(q => q.Id == id,new List<string> { "Hotels"});
+                var Country = await _unitOfWork.Countries.Get(q => q.Id == id, new List<string> { "Hotels" });
                 var result = _mapper.Map<CountryDto>(Country);
                 return Ok(result);
             }
